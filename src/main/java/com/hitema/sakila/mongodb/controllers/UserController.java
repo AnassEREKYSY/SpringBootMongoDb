@@ -2,7 +2,9 @@ package com.hitema.sakila.mongodb.controllers;
 
 import com.hitema.sakila.mongodb.models.User;
 import com.hitema.sakila.mongodb.services.UserService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,9 +38,20 @@ public class UserController {
         return userService.update(user);
     }
 
-    @GetMapping("/search")
-    public List<User> searchUsers(@RequestParam("query") String query) {
-        return userService.search(query);
+    @GetMapping("/search/{query}")
+    public List<User> searchUsers(@PathVariable String query) {
+        return userService.readByFisrtNameOrLastName(query);
+    }
+
+    @PostMapping (value = "/picture/{id}", consumes = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    Boolean savePicture(@PathVariable String id, @RequestBody byte[] picture){
+        userService.savePicture(id, picture);
+        return (userService.getPicture(id)!=null);
+    }
+
+    @GetMapping(value = "/picture/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    byte[] getPicture(@PathVariable String id){
+        return userService.getPicture(id);
     }
 
     @DeleteMapping("/delete/{id}")

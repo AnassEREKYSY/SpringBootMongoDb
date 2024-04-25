@@ -5,7 +5,6 @@ import com.hitema.sakila.mongodb.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -37,16 +36,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> search(String query) {
-        List<User> allUsers = userRepository.findAll();
-        return allUsers.stream()
-                .filter(user -> user.getFirstName().contains(query) || user.getLastName().contains(query))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public boolean delete(String id) {
         this.userRepository.deleteById(id);
         return (this.read(id)==null);
+    }
+
+    @Override
+    public List<User>  readByFisrtNameOrLastName(String expr) {
+        return this.userRepository.findByFirstNameContainingOrLastNameContaining(expr,expr);
+    }
+
+    @Override
+    public byte[] getPicture(String id) {
+        return (read(id)!=null ? read(id).getPicture() : null);
+    }
+
+    @Override
+    public void savePicture(String id, byte[] picture) {
+        User user = read(id);
+        if ( user !=null ){
+            user.setPicture(picture);
+            userRepository.save(user);
+        }
     }
 }

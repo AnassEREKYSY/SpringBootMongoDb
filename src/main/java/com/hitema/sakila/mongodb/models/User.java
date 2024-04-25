@@ -21,6 +21,8 @@ public class User {
     private String lastName;
     @Field("last_update")
     private LocalDateTime lastUpdate;
+    @Field("picture")
+    private byte[] picture;
 
     public User(String firstName, String lastName, String email, LocalDateTime lastUpdate) {
         this.firstName = firstName;
@@ -68,5 +70,12 @@ public class User {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 }

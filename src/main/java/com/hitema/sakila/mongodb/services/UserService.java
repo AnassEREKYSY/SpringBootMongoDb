@@ -8,7 +8,9 @@ public interface UserService {
     public List<User> readAll();
     public User read(String id);
     public User update(User user);
-    List<User> search(String query);
     public boolean delete(String id);
+    public List<User> readByFisrtNameOrLastName(String expr);
+    public byte[] getPicture(String id);
+    void savePicture(String id, byte[] picture);
 
 }
