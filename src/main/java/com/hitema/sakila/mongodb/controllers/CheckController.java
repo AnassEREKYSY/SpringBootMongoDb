@@ -11,7 +11,7 @@ public class CheckController {
 
     @GetMapping({"/","/check"})
     public String check(){
-        String msg = String.format("<h2 style='color:green;text-align:center'><br>Le Serveur Sakila/MongoDB est UP ! %s </h2>", LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd - HH:mm:ss")));
+        String msg = String.format("<h2 style='color:green;text-align:center'><br>Le Serveur Sakila MongoDB & Mysql est UP ! %s </h2>", LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd - HH:mm:ss")));
         return msg;
     }
 }

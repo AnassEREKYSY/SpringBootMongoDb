@@ -1,8 +1,11 @@
 package com.hitema.sakila.mongodb.controllers;
 
 
-import com.hitema.sakila.mongodb.models.City;
-import com.hitema.sakila.mongodb.services.CityService;
+import com.hitema.sakila.mongodb.domain.MigrateMySqlToMongoDBService;
+import com.hitema.sakila.mongodb.models.mongodb.CityMongodb;
+import com.hitema.sakila.mongodb.models.mysql.CityMysql;
+import com.hitema.sakila.mongodb.services.mongodb.CityMongodbService;
+import com.hitema.sakila.mongodb.services.mysql.CityMysqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,34 +14,73 @@ import java.util.List;
 @RestController
 @RequestMapping("/cities")
 public class CityController {
-    CityService cityService;
+
+    CityMongodbService cityMongodbService;
+    CityMysqlService cityMysqlService;
+    private final MigrateMySqlToMongoDBService migrateMySqlToMongoDBService;
+
     @Autowired
-    public CityController(CityService cityService) {
-        this.cityService = cityService;
-    }
-    @PostMapping("/create")
-    public City create(@RequestBody City city) {
-        return cityService.create(city);
+    public CityController(CityMongodbService cityMongodbService, CityMysqlService cityMysqlService, MigrateMySqlToMongoDBService migrateMySqlToMongoDBService) {
+        this.cityMongodbService = cityMongodbService;
+        this.cityMysqlService = cityMysqlService;
+        this.migrateMySqlToMongoDBService = migrateMySqlToMongoDBService;
     }
 
-    @GetMapping("/read/{id}")
-    public City read(@PathVariable String id) {
-        return cityService.read(id);
+    @GetMapping("/migrate")
+    Integer startMigration(){
+        return migrateMySqlToMongoDBService.migrate();
+    }
+    // mongo db service
+    @PostMapping("/mongodb/create")
+    public CityMongodb createMongo(@RequestBody CityMongodb city) {
+        return cityMongodbService.create(city);
     }
 
-    @GetMapping({"/all","/"})
-    public List<City> readAll() {
-        return cityService.readAll();
+    @GetMapping("/mongodb/read/{id}")
+    public CityMongodb readMongo(@PathVariable String id) {
+        return cityMongodbService.read(id);
     }
 
-    @PutMapping("/update/{id}")
-    public City update(@RequestBody City city) {
-        return cityService.update(city);
+    @GetMapping({"/mongodb/all","/mongodb/"})
+    public List<CityMongodb> readAllMongo() {
+        return cityMongodbService.readAll();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public boolean delete(@PathVariable String id) {
-        cityService.delete(id);
-        return (read(id)==null);
+    @PutMapping("/mongodb/update/{id}")
+    public CityMongodb updateMongo(@RequestBody CityMongodb city) {
+        return cityMongodbService.update(city);
+    }
+
+    @DeleteMapping("/mongodb/delete/{id}")
+    public boolean deleteMongo(@PathVariable String id) {
+        cityMongodbService.delete(id);
+        return (readMongo(id)==null);
+    }
+
+    // mysql service
+    @PostMapping("/mysql/create")
+    public CityMysql createMysql(@RequestBody CityMysql city) {
+        return cityMysqlService.create(city);
+    }
+
+    @GetMapping("/mysql/read/{id}")
+    public CityMysql readMysql(@PathVariable Long id) {
+        return cityMysqlService.read(id);
+    }
+
+    @GetMapping({"/mysql/all","/mysql/"})
+    public List<CityMysql> readAllMysql() {
+        return cityMysqlService.readAll();
+    }
+
+    @PutMapping("/mysql/update/{id}")
+    public CityMysql updateMysql(@RequestBody CityMysql city) {
+        return cityMysqlService.update(city);
+    }
+
+    @DeleteMapping("/mysql/delete/{id}")
+    public boolean deleteMysql(@PathVariable Long id) {
+        cityMysqlService.delete(id);
+        return (readMysql(id)==null);
     }
 }
