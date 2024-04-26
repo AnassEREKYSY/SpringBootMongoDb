@@ -1,6 +1,7 @@
 package com.hitema.sakila.mongodb.services.mongodb;
 
 import com.hitema.sakila.mongodb.models.mongodb.CityMongodb;
+import com.hitema.sakila.mongodb.models.mongodb.CountryMongodb;
 import com.hitema.sakila.mongodb.repositories.mongodb.CityMongodbRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,12 @@ public class CityMongodbServiceImpl implements CityMongodbService {
     @Override
     public List<CityMongodb> readAll() {
         return this.cityMongodbRepository.findAll();
+    }
+
+    @Override
+    public List<CountryMongodb> getAll() {
+        List<CityMongodb> cities=this.readAll();
+        return List.of();
     }
 
     @Override

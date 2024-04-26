@@ -13,7 +13,7 @@ public class CityMongodb {
     private String cityName;
     @Field("capital")
     private boolean capital;
-    @DBRef
+
     private CountryMongodb country;
 
     public CityMongodb(String id, String cityName, Boolean capital, CountryMongodb country) {

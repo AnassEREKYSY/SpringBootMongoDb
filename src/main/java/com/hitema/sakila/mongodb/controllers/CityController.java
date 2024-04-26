@@ -28,7 +28,7 @@ public class CityController {
 
     @GetMapping("/migrate")
     Integer startMigration(){
-        return migrateMySqlToMongoDBService.migrate();
+        return migrateMySqlToMongoDBService.migrateCities();
     }
     // mongo db service
     @PostMapping("/mongodb/create")
@@ -53,8 +53,13 @@ public class CityController {
 
     @DeleteMapping("/mongodb/delete/{id}")
     public boolean deleteMongo(@PathVariable String id) {
-        cityMongodbService.delete(id);
-        return (readMongo(id)==null);
+        return cityMongodbService.delete(id);
+    }
+
+    @GetMapping("/mongodb/countries")
+    public List<CityMongodb> getCountriesMongo() {
+
+        return null;
     }
 
     // mysql service
@@ -82,5 +87,11 @@ public class CityController {
     public boolean deleteMysql(@PathVariable Long id) {
         cityMysqlService.delete(id);
         return (readMysql(id)==null);
+    }
+
+    @GetMapping("/mysql/countries")
+    public List<CityMysql> getCountriesMysql() {
+
+        return null;
     }
 }

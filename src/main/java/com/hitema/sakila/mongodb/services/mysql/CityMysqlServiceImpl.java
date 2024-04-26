@@ -1,6 +1,7 @@
 package com.hitema.sakila.mongodb.services.mysql;
 
 import com.hitema.sakila.mongodb.models.mysql.CityMysql;
+import com.hitema.sakila.mongodb.models.mysql.CountryMysql;
 import com.hitema.sakila.mongodb.repositories.mysql.CityMysqlRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,12 @@ public class CityMysqlServiceImpl implements CityMysqlService {
     @Override
     public List<CityMysql> readAll() {
         return this.cityMysqlRepository.findAll();
+    }
+
+    @Override
+    public List<CountryMysql> getAll() {
+        List<CityMysql> cities=this.readAll();
+        return null;
     }
 
     @Override
